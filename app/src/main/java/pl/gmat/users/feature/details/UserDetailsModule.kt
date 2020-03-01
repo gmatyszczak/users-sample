@@ -1,13 +1,19 @@
 package pl.gmat.users.feature.details
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import pl.gmat.users.common.dagger.ScreenScope
 
 @Module
-interface UserDetailsModule {
+class UserDetailsModule {
 
-    @Binds
+    @Provides
     @ScreenScope
-    fun bindUsersListRepository(repository: UserDetailsRepositoryImpl): UserDetailsRepository
+    fun provideUsersListRepository(repository: UserDetailsRepositoryImpl): UserDetailsRepository =
+        repository
+
+    @Provides
+    @ScreenScope
+    fun provideUserId(activity: UserDetailsActivity): Long =
+        activity.intent.getLongExtra(UserDetailsActivity.EXTRA_USER_ID, -1)
 }

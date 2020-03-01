@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import pl.gmat.users.common.SingleLiveEvent
+import pl.gmat.users.common.model.User
 import javax.inject.Inject
 
 class UsersListViewModel @Inject constructor(
@@ -29,5 +30,9 @@ class UsersListViewModel @Inject constructor(
         effect.value = UsersListEffect.ShowAddUser
     }
 
-    fun onDeleteAllClicked() = Unit
+    fun onDeleteAllClicked() = Unit // TODO
+
+    fun onUserClicked(user: User) {
+        effect.value = UsersListEffect.ShowUserDetails(user.id)
+    }
 }

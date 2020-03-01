@@ -1,5 +1,7 @@
 package pl.gmat.users.feature.details
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -17,6 +19,16 @@ import javax.inject.Provider
 
 class UserDetailsActivity : AppCompatActivity() {
 
+    companion object {
+
+        const val EXTRA_USER_ID = "EXTRA_USER_ID"
+
+        fun createIntent(context: Context, id: Long) =
+            Intent(context, UserDetailsActivity::class.java).apply {
+                putExtra(EXTRA_USER_ID, id)
+            }
+    }
+
     @Inject
     lateinit var viewModelProvider: Provider<UserDetailsViewModel>
 
@@ -30,12 +42,14 @@ class UserDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Injector.appComponent.userDetailsComponentFactory().create(this).inject(this)
         super.onCreate(savedInstanceState)
-        DataBindingUtil.setContentView<ActivityUserDetailsBinding>(this, R.layout.activity_user_details)
-            .apply {
-                viewModel = this@UserDetailsActivity.viewModel
-                state = this@UserDetailsActivity.viewModel.state
-                lifecycleOwner = this@UserDetailsActivity
-            }
+        DataBindingUtil.setContentView<ActivityUserDetailsBinding>(
+            this,
+            R.layout.activity_user_details
+        ).apply {
+            viewModel = this@UserDetailsActivity.viewModel
+            state = this@UserDetailsActivity.viewModel.state
+            lifecycleOwner = this@UserDetailsActivity
+        }
         viewModel.effect.observe(this, Observer { handleEffect(it) })
     }
 

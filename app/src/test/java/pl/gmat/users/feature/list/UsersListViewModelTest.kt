@@ -66,4 +66,15 @@ class UsersListViewModelTest {
             verifyNoMoreInteractions()
         }
     }
+
+    @Test
+    fun `on user clicked`() {
+        viewModel.onUserClicked(testUser)
+
+        inOrder(stateObserverMock, effectObserverMock) {
+            verify(stateObserverMock).onChanged(UsersListState(users = listOf(testUser)))
+            verify(effectObserverMock).onChanged(UsersListEffect.ShowUserDetails(testUser.id))
+            verifyNoMoreInteractions()
+        }
+    }
 }

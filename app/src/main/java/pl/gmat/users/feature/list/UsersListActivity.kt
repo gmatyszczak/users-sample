@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import pl.gmat.users.R
 import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.databinding.ActivityUsersListBinding
+import pl.gmat.users.feature.details.UserDetailsActivity
 import pl.gmat.users.feature.edit.EditUserActivity
 import javax.inject.Inject
 import javax.inject.Provider
@@ -50,7 +51,9 @@ class UsersListActivity : AppCompatActivity() {
     }
 
     private fun handleEffect(effect: UsersListEffect) = when (effect) {
-        UsersListEffect.ShowAddUser -> startActivity(EditUserActivity.createIntent(this))
+        is UsersListEffect.ShowAddUser -> startActivity(EditUserActivity.createIntent(this))
+        is UsersListEffect.ShowUserDetails ->
+            startActivity(UserDetailsActivity.createIntent(this, effect.id))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

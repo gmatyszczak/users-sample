@@ -8,6 +8,7 @@ import javax.inject.Inject
 interface UserDetailsRepository
 
 class UserDetailsRepositoryImpl @Inject constructor(
+    private val userId: Long,
     private val mapper: UserMapper,
     private val userDao: UserDao,
     private val addressDao: AddressDao
