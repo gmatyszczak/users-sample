@@ -1,3 +1,7 @@
 package pl.gmat.users.feature.details
 
-class UserDetailsState
+import pl.gmat.users.common.model.User
+
+data class UserDetailsState(
+    val user: User = User()
+)
