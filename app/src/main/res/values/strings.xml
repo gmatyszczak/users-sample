@@ -3,6 +3,8 @@
 
   <string name="add_user">Add user</string>
   <string name="delete_all">Delete all</string>
+  <string name="delete">Delete</string>
+  <string name="edit">Edit</string>
 
   <string name="first_name">First Name</string>
   <string name="last_name">Last Name</string>

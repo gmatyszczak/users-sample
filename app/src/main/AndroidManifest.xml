@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".feature.edit.EditUserActivity" />
+        <activity android:name=".feature.details.UserDetailsActivity" />
     </application>
 
 </manifest>
