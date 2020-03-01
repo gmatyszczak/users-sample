@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,6 +33,9 @@ class EditUserViewModelTest {
     private lateinit var stateObserverMock: Observer<EditUserState>
 
     @Mock
+    private lateinit var effectObserverMock: Observer<EditUserEffect>
+
+    @Mock
     private lateinit var repositoryMock: EditUserRepository
 
     private lateinit var viewModel: EditUserViewModel
@@ -46,6 +48,7 @@ class EditUserViewModelTest {
         whenever(repositoryMock.loadAddresses()).thenReturn(emptyList())
         viewModel = EditUserViewModel(repositoryMock)
         viewModel.state.observeForever(stateObserverMock)
+        viewModel.effect.observeForever(effectObserverMock)
     }
 
     @After
@@ -79,8 +82,12 @@ class EditUserViewModelTest {
     fun `when is add new address checked on add clicked`() = runBlockingTest {
         viewModel.onAddClicked(EditUserForm())
 
-        verify(stateObserverMock).onChanged(EditUserState())
-        verify(repositoryMock).addUser(User(), isNewAddress = true)
+        inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
+            verify(stateObserverMock).onChanged(EditUserState())
+            verify(repositoryMock).addUser(User(), isNewAddress = true)
+            verify(effectObserverMock).onChanged(EditUserEffect.Finish)
+            verifyNoMoreInteractions()
+        }
     }
 
     @Test
@@ -91,11 +98,12 @@ class EditUserViewModelTest {
 
         viewModel.onAddClicked(EditUserForm())
 
-        inOrder(stateObserverMock) {
+        inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
             verify(stateObserverMock).onChanged(EditUserState())
             verify(stateObserverMock).onChanged(state)
+            verify(repositoryMock).addUser(User(address = address), isNewAddress = false)
+            verify(effectObserverMock).onChanged(EditUserEffect.Finish)
             verifyNoMoreInteractions()
         }
-        verify(repositoryMock).addUser(User(address = address), isNewAddress = false)
     }
 }

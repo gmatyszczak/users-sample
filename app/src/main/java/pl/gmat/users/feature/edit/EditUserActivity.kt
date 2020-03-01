@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import pl.gmat.users.R
@@ -43,6 +44,7 @@ class EditUserActivity : AppCompatActivity() {
                 lifecycleOwner = this@EditUserActivity
                 setupViews()
             }
+        viewModel.effect.observe(this, Observer { handleEffect(it) })
     }
 
     private fun ActivityEditUserBinding.setupViews() {
@@ -74,4 +76,8 @@ class EditUserActivity : AppCompatActivity() {
     }
 
     private fun EditText.textString() = text.toString()
+
+    private fun handleEffect(effect: EditUserEffect) = when (effect) {
+        EditUserEffect.Finish -> finish()
+    }
 }

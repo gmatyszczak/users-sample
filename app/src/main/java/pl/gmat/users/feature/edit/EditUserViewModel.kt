@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pl.gmat.users.common.SingleLiveEvent
 import pl.gmat.users.common.model.Address
 import pl.gmat.users.common.model.Gender
 import pl.gmat.users.common.model.User
@@ -14,9 +15,9 @@ class EditUserViewModel @Inject constructor(
     private val repository: EditUserRepository
 ) : ViewModel() {
 
-    val state = MutableLiveData<EditUserState>().apply {
-        value = EditUserState()
-    }
+    val state = MutableLiveData<EditUserState>().apply { value = EditUserState() }
+    val effect = SingleLiveEvent<EditUserEffect>()
+
     private val currentState get() = state.value ?: EditUserState()
 
     init {
@@ -35,6 +36,7 @@ class EditUserViewModel @Inject constructor(
 
     fun onAddClicked(form: EditUserForm) = viewModelScope.launch(Dispatchers.Main) {
         repository.addUser(form.toUser(), currentState.isAddNewAddressChecked)
+        effect.value = EditUserEffect.Finish
     }
 
     private fun EditUserForm.toUser(): User {
