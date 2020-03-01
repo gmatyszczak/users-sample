@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -45,6 +46,11 @@ class EditUserActivity : AppCompatActivity() {
     }
 
     private fun ActivityEditUserBinding.setupViews() {
+        setupGenderSpinner()
+        setupAddClickListener()
+    }
+
+    private fun ActivityEditUserBinding.setupGenderSpinner() {
         val spinnerAdapter = ArrayAdapter(
             this@EditUserActivity,
             android.R.layout.simple_spinner_item,
@@ -52,4 +58,20 @@ class EditUserActivity : AppCompatActivity() {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         genderSpinner.adapter = spinnerAdapter
     }
+
+    private fun ActivityEditUserBinding.setupAddClickListener() {
+        addButton.setOnClickListener {
+            val form = EditUserForm(
+                firstNameEditText.textString(),
+                lastNameEditText.textString(),
+                ageEditText.textString(),
+                genderSpinner.selectedItemPosition,
+                addressSpinner.selectedItemPosition,
+                addressEditText.textString()
+            )
+            this@EditUserActivity.viewModel.onAddClicked(form)
+        }
+    }
+
+    private fun EditText.textString() = text.toString()
 }
