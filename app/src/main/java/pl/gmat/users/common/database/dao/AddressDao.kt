@@ -14,4 +14,7 @@ interface AddressDao {
 
     @Query("SELECT * FROM $ADDRESS_TABLE_NAME")
     suspend fun loadAll(): List<AddressEntity>
+
+    @Query("SELECT * FROM $ADDRESS_TABLE_NAME WHERE id = :id")
+    suspend fun load(id: Long): AddressEntity
 }
