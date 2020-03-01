@@ -1,5 +1,6 @@
 package pl.gmat.users.feature.details
 
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -45,6 +46,13 @@ class UserDetailsRepositoryImplTest {
         whenever(mapperMock.toUser(testUserEntity, testAddressEntity)).thenReturn(testUser)
 
         assertEquals(testUser, repository.loadUser())
+    }
+
+    @Test
+    fun `on delete user`() = runBlockingTest {
+        repository.deleteUser()
+
+        verify(userDaoMock).delete(userId)
     }
 
 }

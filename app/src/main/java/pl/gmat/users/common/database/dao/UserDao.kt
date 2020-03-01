@@ -18,4 +18,7 @@ interface UserDao {
 
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE id = :id")
     suspend fun load(id: Long): UserEntity
+
+    @Query("DELETE FROM $USER_TABLE_NAME WHERE id = :id")
+    suspend fun delete(id: Long)
 }

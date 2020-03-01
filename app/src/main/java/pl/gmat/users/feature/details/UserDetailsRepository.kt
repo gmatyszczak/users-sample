@@ -9,6 +9,7 @@ import javax.inject.Inject
 interface UserDetailsRepository {
 
     suspend fun loadUser(): User
+    suspend fun deleteUser()
 }
 
 class UserDetailsRepositoryImpl @Inject constructor(
@@ -22,4 +23,6 @@ class UserDetailsRepositoryImpl @Inject constructor(
         val userEntity = userDao.load(userId)
         return mapper.toUser(userEntity, addressDao.load(userEntity.addressId))
     }
+
+    override suspend fun deleteUser() = userDao.delete(userId)
 }

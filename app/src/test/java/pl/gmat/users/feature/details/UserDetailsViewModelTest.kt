@@ -2,6 +2,7 @@ package pl.gmat.users.feature.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
@@ -58,5 +59,17 @@ class UserDetailsViewModelTest {
     @Test
     fun `on init`() {
         verify(stateObserverMock).onChanged(UserDetailsState(user = testUser))
+    }
+
+    @Test
+    fun `on delete clicked`() = runBlockingTest {
+        viewModel.onDeleteClicked()
+
+        inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
+            verify(stateObserverMock).onChanged(UserDetailsState(user = testUser))
+            verify(repositoryMock).deleteUser()
+            verify(effectObserverMock).onChanged(UserDetailsEffect.Finish)
+            verifyNoMoreInteractions()
+        }
     }
 }

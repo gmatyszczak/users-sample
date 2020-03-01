@@ -53,7 +53,9 @@ class UserDetailsActivity : AppCompatActivity() {
         viewModel.effect.observe(this, Observer { handleEffect(it) })
     }
 
-    private fun handleEffect(effect: UserDetailsEffect) = Unit
+    private fun handleEffect(effect: UserDetailsEffect) = when (effect) {
+        UserDetailsEffect.Finish -> finish()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_details, menu)
@@ -65,6 +67,7 @@ class UserDetailsActivity : AppCompatActivity() {
             true
         }
         R.id.menu_delete -> {
+            viewModel.onDeleteClicked()
             true
         }
         else -> super.onOptionsItemSelected(item)

@@ -22,4 +22,9 @@ class UserDetailsViewModel @Inject constructor(
             state.value = currentState.copy(user = userDetailsRepository.loadUser())
         }
     }
+
+    fun onDeleteClicked() = viewModelScope.launch(Dispatchers.Main) {
+        userDetailsRepository.deleteUser()
+        effect.value = UserDetailsEffect.Finish
+    }
 }
