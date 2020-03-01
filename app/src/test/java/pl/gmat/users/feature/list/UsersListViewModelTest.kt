@@ -20,10 +20,11 @@ class UsersListViewModelTest {
     @Mock
     private lateinit var effectObserverMock: Observer<UsersListEffect>
 
-    private val viewModel = UsersListViewModel()
+    private lateinit var viewModel: UsersListViewModel
 
     @Before
     fun setup() {
+        viewModel = UsersListViewModel()
         viewModel.effect.observeForever(effectObserverMock)
     }
 
