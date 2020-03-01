@@ -10,7 +10,7 @@ import pl.gmat.users.common.database.entity.AddressEntity
 interface AddressDao {
 
     @Insert
-    suspend fun insert(address: AddressEntity)
+    suspend fun insert(address: AddressEntity): Long
 
     @Query("SELECT * FROM $ADDRESS_TABLE_NAME")
     suspend fun loadAll(): List<AddressEntity>

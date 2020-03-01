@@ -2,15 +2,16 @@ package pl.gmat.users.common.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import pl.gmat.users.common.model.Gender
 
 const val USER_TABLE_NAME = "users"
 
 @Entity(tableName = USER_TABLE_NAME)
 data class UserEntity(
-    @PrimaryKey val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val firstName: String = "",
     val lastName: String = "",
     val age: String = "",
-    val gender: Int = 0,
-    val address: Int = 0
+    val gender: String = Gender.MALE.name,
+    val addressId: Long = 0
 )
