@@ -1,4 +1,4 @@
-package pl.gmat
+package pl.gmat.users
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
