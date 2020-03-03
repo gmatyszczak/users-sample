@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import pl.gmat.users.R
 import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.databinding.ActivityUserDetailsBinding
+import pl.gmat.users.feature.edit.EditUserActivity
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -54,7 +55,9 @@ class UserDetailsActivity : AppCompatActivity() {
     }
 
     private fun handleEffect(effect: UserDetailsEffect) = when (effect) {
-        UserDetailsEffect.Finish -> finish()
+        is UserDetailsEffect.Finish -> finish()
+        is UserDetailsEffect.ShowEditUser ->
+            startActivity(EditUserActivity.createIntent(this, effect.user))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,6 +67,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_edit -> {
+            viewModel.onEditClicked()
             true
         }
         R.id.menu_delete -> {

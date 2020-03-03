@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 interface EditUserRepository {
 
-    suspend fun addUser(user: User, isNewAddress: Boolean = false)
+    suspend fun insertOrUpdateUser(user: User, isNewAddress: Boolean = false)
     suspend fun loadAddresses(): List<Address>
 }
 
@@ -19,7 +19,7 @@ class EditUserRepositoryImpl @Inject constructor(
     private val addressDao: AddressDao
 ) : EditUserRepository {
 
-    override suspend fun addUser(user: User, isNewAddress: Boolean) {
+    override suspend fun insertOrUpdateUser(user: User, isNewAddress: Boolean) {
         val userToInsert =
             if (isNewAddress) {
                 val id = addressDao.insert(mapper.toAddressEntity(user.address))
@@ -27,7 +27,7 @@ class EditUserRepositoryImpl @Inject constructor(
             } else {
                 user
             }
-        userDao.insert(mapper.toUserEntity(userToInsert))
+        userDao.insertOrUpdate(mapper.toUserEntity(userToInsert))
     }
 
     override suspend fun loadAddresses(): List<Address> =

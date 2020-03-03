@@ -72,4 +72,15 @@ class UserDetailsViewModelTest {
             verifyNoMoreInteractions()
         }
     }
+
+    @Test
+    fun `on edit clicked`() {
+        viewModel.onEditClicked()
+
+        inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
+            verify(stateObserverMock).onChanged(UserDetailsState(user = testUser))
+            verify(effectObserverMock).onChanged(UserDetailsEffect.ShowEditUser(testUser))
+            verifyNoMoreInteractions()
+        }
+    }
 }

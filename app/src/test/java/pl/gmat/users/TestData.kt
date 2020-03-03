@@ -17,7 +17,7 @@ val testAddress = Address(
 )
 
 val testUser = User(
-    id = 0,
+    id = 10,
     firstName = firstName,
     lastName = lastName,
     age = age,
@@ -31,7 +31,7 @@ val testAddressEntity = AddressEntity(
 )
 
 val testUserEntity = UserEntity(
-    id = 0,
+    id = 10,
     firstName = firstName,
     lastName = lastName,
     age = age,

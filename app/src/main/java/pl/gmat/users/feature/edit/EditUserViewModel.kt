@@ -6,13 +6,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.gmat.users.common.SingleLiveEvent
-import pl.gmat.users.common.model.Address
-import pl.gmat.users.common.model.Gender
-import pl.gmat.users.common.model.User
 import javax.inject.Inject
 
 class EditUserViewModel @Inject constructor(
-    private val repository: EditUserRepository
+    private val repository: EditUserRepository,
+    private val mode: EditUserMode,
+    private val mapper: EditUserFormMapper
 ) : ViewModel() {
 
     val state = MutableLiveData<EditUserState>().apply { value = EditUserState() }
@@ -22,7 +21,15 @@ class EditUserViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.Main) {
-            state.value = currentState.copy(addresses = repository.loadAddresses())
+            state.value = currentState.copy(
+                addresses = repository.loadAddresses(),
+                submitButtonTextResId = mode.submitButtonResId
+            )
+            if (mode is EditUserMode.Update) {
+                val form = mapper.toEditUserForm(mode.user, currentState.addresses)
+                effect.value = EditUserEffect.InitializeForm(form)
+                state.value = currentState.copy(isAddNewAddressChecked = false)
+            }
         }
     }
 
@@ -34,24 +41,10 @@ class EditUserViewModel @Inject constructor(
         state.value = currentState.copy(isAddNewAddressChecked = true)
     }
 
-    fun onAddClicked(form: EditUserForm) = viewModelScope.launch(Dispatchers.Main) {
-        repository.addUser(form.toUser(), currentState.isAddNewAddressChecked)
+    fun onSubmitClicked(form: EditUserForm) = viewModelScope.launch(Dispatchers.Main) {
+        val userId = if (mode is EditUserMode.Update) mode.user.id else null
+        val user = mapper.toUser(form, currentState.isAddNewAddressChecked, currentState.addresses, userId)
+        repository.insertOrUpdateUser(user, currentState.isAddNewAddressChecked)
         effect.value = EditUserEffect.Finish
-    }
-
-    private fun EditUserForm.toUser(): User {
-        val address =
-            if (currentState.isAddNewAddressChecked) {
-                Address(value = newAddress)
-            } else {
-                currentState.addresses[existingAddressIndex]
-            }
-        return User(
-            firstName = firstName,
-            lastName = lastName,
-            age = age,
-            gender = Gender.values()[genderIndex],
-            address = address
-        )
     }
 }

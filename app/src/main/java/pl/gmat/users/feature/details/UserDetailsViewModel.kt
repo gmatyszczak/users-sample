@@ -27,4 +27,8 @@ class UserDetailsViewModel @Inject constructor(
         userDetailsRepository.deleteUser()
         effect.value = UserDetailsEffect.Finish
     }
+
+    fun onEditClicked() {
+        effect.value = UserDetailsEffect.ShowEditUser(currentState.user)
+    }
 }

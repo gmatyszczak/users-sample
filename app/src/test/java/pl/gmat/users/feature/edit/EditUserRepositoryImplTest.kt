@@ -42,17 +42,17 @@ class EditUserRepositoryImplTest {
         whenever(mapperMock.toUserEntity(testUser.copy(address = testUser.address.copy(id = newId))))
             .thenReturn(userEntityToInsert)
 
-        repository.addUser(testUser, isNewAddress = true)
+        repository.insertOrUpdateUser(testUser, isNewAddress = true)
 
-        verify(userDaoMock).insert(userEntityToInsert)
+        verify(userDaoMock).insertOrUpdate(userEntityToInsert)
     }
 
     @Test
     fun `when is not new address on add user`() = runBlockingTest {
         whenever(mapperMock.toUserEntity(testUser)).thenReturn(testUserEntity)
 
-        repository.addUser(testUser, isNewAddress = false)
+        repository.insertOrUpdateUser(testUser, isNewAddress = false)
 
-        verify(userDaoMock).insert(testUserEntity)
+        verify(userDaoMock).insertOrUpdate(testUserEntity)
     }
 }

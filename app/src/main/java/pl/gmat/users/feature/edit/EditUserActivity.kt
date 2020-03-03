@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import pl.gmat.users.R
 import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.common.model.Gender
+import pl.gmat.users.common.model.User
 import pl.gmat.users.databinding.ActivityEditUserBinding
 import javax.inject.Inject
 import javax.inject.Provider
@@ -21,11 +22,18 @@ import javax.inject.Provider
 class EditUserActivity : AppCompatActivity() {
 
     companion object {
-        fun createIntent(context: Context) = Intent(context, EditUserActivity::class.java)
+        const val EXTRA_USER = "EXTRA_USER"
+
+        fun createIntent(context: Context, user: User? = null) =
+            Intent(context, EditUserActivity::class.java).apply {
+                user?.let { putExtra(EXTRA_USER, user) }
+            }
     }
 
     @Inject
     lateinit var viewModelProvider: Provider<EditUserViewModel>
+
+    private var binding: ActivityEditUserBinding? = null
 
     private val viewModel: EditUserViewModel by viewModels {
         object : ViewModelProvider.Factory {
@@ -37,7 +45,10 @@ class EditUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Injector.appComponent.editUserComponentFactory().create(this).inject(this)
         super.onCreate(savedInstanceState)
-        DataBindingUtil.setContentView<ActivityEditUserBinding>(this, R.layout.activity_edit_user)
+        binding = DataBindingUtil.setContentView<ActivityEditUserBinding>(
+            this,
+            R.layout.activity_edit_user
+        )
             .apply {
                 viewModel = this@EditUserActivity.viewModel
                 state = this@EditUserActivity.viewModel.state
@@ -45,6 +56,11 @@ class EditUserActivity : AppCompatActivity() {
                 setupViews()
             }
         viewModel.effect.observe(this, Observer { handleEffect(it) })
+    }
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 
     private fun ActivityEditUserBinding.setupViews() {
@@ -62,7 +78,7 @@ class EditUserActivity : AppCompatActivity() {
     }
 
     private fun ActivityEditUserBinding.setupAddClickListener() {
-        addButton.setOnClickListener {
+        submitButton.setOnClickListener {
             val form = EditUserForm(
                 firstNameEditText.textString(),
                 lastNameEditText.textString(),
@@ -71,13 +87,23 @@ class EditUserActivity : AppCompatActivity() {
                 addressSpinner.selectedItemPosition,
                 addressEditText.textString()
             )
-            this@EditUserActivity.viewModel.onAddClicked(form)
+            this@EditUserActivity.viewModel.onSubmitClicked(form)
         }
     }
 
     private fun EditText.textString() = text.toString()
 
     private fun handleEffect(effect: EditUserEffect) = when (effect) {
-        EditUserEffect.Finish -> finish()
+        is EditUserEffect.Finish -> finish()
+        is EditUserEffect.InitializeForm -> binding?.initializeForm(effect.form)
+    }
+
+    private fun ActivityEditUserBinding.initializeForm(form: EditUserForm) {
+        firstNameEditText.setText(form.firstName)
+        lastNameEditText.setText(form.lastName)
+        ageEditText.setText(form.age)
+        genderSpinner.setSelection(form.genderIndex)
+        addressSpinner.setSelection(form.existingAddressIndex)
+        addressEditText.setText(form.newAddress)
     }
 }
