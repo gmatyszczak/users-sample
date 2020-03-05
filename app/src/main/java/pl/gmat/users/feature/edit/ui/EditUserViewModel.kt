@@ -36,9 +36,18 @@ class EditUserViewModel @Inject constructor(
         }
     }
 
-    fun onAddNewAddressClicked() {
+    fun onAddNewAddressClicked(address: String) {
+        val addresses = currentState.addresses
+            .toMutableList()
+            .apply { add(Address(id = -1, value = address)) }
         state.value = currentState.copy(
-            addresses = currentState.addresses.toMutableList().apply { add(Address(id = -1)) }
+            addresses = addresses
+        )
+    }
+
+    fun onRemoveAddressClicked(address: Address) {
+        state.value = currentState.copy(
+            addresses = currentState.addresses.toMutableList().apply { remove(address) }
         )
     }
 

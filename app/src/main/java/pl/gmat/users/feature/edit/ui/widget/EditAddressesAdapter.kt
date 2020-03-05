@@ -11,7 +11,7 @@ import pl.gmat.users.databinding.ItemEditAddressBinding
 import pl.gmat.users.feature.edit.ui.EditUserViewModel
 
 private val diffCallback = object : DiffUtil.ItemCallback<Address>() {
-    override fun areItemsTheSame(oldItem: Address, newItem: Address) = oldItem.id == newItem.id
+    override fun areItemsTheSame(oldItem: Address, newItem: Address) = oldItem == newItem
     override fun areContentsTheSame(oldItem: Address, newItem: Address) = oldItem == newItem
 }
 

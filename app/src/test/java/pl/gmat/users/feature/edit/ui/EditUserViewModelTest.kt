@@ -22,6 +22,7 @@ import pl.gmat.users.feature.edit.data.EditUserRepository
 import pl.gmat.users.feature.edit.mapper.EditUserFormMapper
 import pl.gmat.users.feature.edit.model.EditUserForm
 import pl.gmat.users.feature.edit.model.EditUserMode
+import pl.gmat.users.testAddress
 import pl.gmat.users.testUser
 
 @ExperimentalCoroutinesApi
@@ -145,7 +146,7 @@ class EditUserViewModelTest {
 
     @Test
     fun `on add new address clicked`() {
-        viewModel.onAddNewAddressClicked()
+        viewModel.onAddNewAddressClicked("test")
 
         inOrder(stateObserverMock, effectObserverMock) {
             verify(stateObserverMock).onChanged(
@@ -156,7 +157,38 @@ class EditUserViewModelTest {
             verify(stateObserverMock).onChanged(
                 EditUserState(
                     submitButtonTextResId = EditUserMode.Add.submitButtonResId,
-                    addresses = listOf(Address(id = -1))
+                    addresses = listOf(Address(id = -1, value = "test"))
+                )
+            )
+            verifyNoMoreInteractions()
+        }
+    }
+
+    @Test
+    fun `on remove address clicked`() {
+        viewModel.state.value = EditUserState(
+            submitButtonTextResId = EditUserMode.Add.submitButtonResId,
+            addresses = listOf(testAddress)
+        )
+
+        viewModel.onRemoveAddressClicked(testAddress)
+
+        inOrder(stateObserverMock, effectObserverMock) {
+            verify(stateObserverMock).onChanged(
+                EditUserState(
+                    submitButtonTextResId = EditUserMode.Add.submitButtonResId
+                )
+            )
+            verify(stateObserverMock).onChanged(
+                EditUserState(
+                    submitButtonTextResId = EditUserMode.Add.submitButtonResId,
+                    addresses = listOf(testAddress)
+                )
+            )
+            verify(stateObserverMock).onChanged(
+                EditUserState(
+                    submitButtonTextResId = EditUserMode.Add.submitButtonResId,
+                    addresses = emptyList()
                 )
             )
             verifyNoMoreInteractions()
