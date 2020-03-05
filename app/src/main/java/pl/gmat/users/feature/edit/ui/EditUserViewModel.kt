@@ -28,29 +28,19 @@ class EditUserViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.Main) {
             state.value = currentState.copy(
-                addresses = repository.loadAddresses(),
                 submitButtonTextResId = mode.submitButtonResId
             )
             if (mode is EditUserMode.Update) {
-                val form = mapper.toEditUserForm(mode.user, currentState.addresses)
+                val form = mapper.toEditUserForm(mode.user)
                 effect.value = EditUserEffect.InitializeForm(form)
-                state.value = currentState.copy(isAddNewAddressChecked = false)
             }
         }
     }
 
-    fun onChooseExistingAddressClicked() {
-        state.value = currentState.copy(isAddNewAddressChecked = false)
-    }
-
-    fun onAddNewAddressClicked() {
-        state.value = currentState.copy(isAddNewAddressChecked = true)
-    }
-
     fun onSubmitClicked(form: EditUserForm) = viewModelScope.launch(Dispatchers.Main) {
         val userId = if (mode is EditUserMode.Update) mode.user.id else null
-        val user = mapper.toUser(form, currentState.isAddNewAddressChecked, currentState.addresses, userId)
-        repository.insertOrUpdateUser(user, currentState.isAddNewAddressChecked)
+        val user = mapper.toUser(form, userId)
+        repository.insertOrUpdateUser(user)
         effect.value = EditUserEffect.Finish
     }
 }

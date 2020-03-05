@@ -2,9 +2,7 @@ package pl.gmat.users.feature.edit.mapper
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import pl.gmat.users.common.model.Address
 import pl.gmat.users.feature.edit.model.EditUserForm
-import pl.gmat.users.testAddress
 import pl.gmat.users.testUser
 
 class EditUserFormMapperImplTest {
@@ -17,39 +15,23 @@ class EditUserFormMapperImplTest {
         lastName = testUser.lastName,
         genderIndex = testUser.gender.ordinal,
         age = testUser.age,
-        existingAddressIndex = 0,
-        newAddress = "test"
+        newAddress = testUser.address.value
     )
 
     @Test
     fun `to edit user form`() {
         assertEquals(
-            form.copy(newAddress = ""),
-            mapper.toEditUserForm(testUser, listOf(testAddress))
+            form,
+            mapper.toEditUserForm(testUser)
         )
     }
 
     @Test
-    fun `when is add new address true on to user`() {
-        assertEquals(
-            testUser.copy(address = Address(value = "test")),
-            mapper.toUser(
-                form = form,
-                isAddNewAddress = true,
-                addresses = emptyList(),
-                id = 10
-            )
-        )
-    }
-
-    @Test
-    fun `when is add new address false on to user`() {
+    fun `to user`() {
         assertEquals(
             testUser,
             mapper.toUser(
                 form = form,
-                isAddNewAddress = false,
-                addresses = listOf(testAddress),
                 id = 10
             )
         )

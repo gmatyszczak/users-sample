@@ -7,6 +7,5 @@ data class EditUserForm(
     val lastName: String = "",
     val age: String = "",
     val genderIndex: Int = Gender.MALE.ordinal,
-    val existingAddressIndex: Int = 0,
     val newAddress: String = ""
 )

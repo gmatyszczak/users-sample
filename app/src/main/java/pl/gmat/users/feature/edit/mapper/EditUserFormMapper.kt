@@ -8,11 +8,9 @@ import javax.inject.Inject
 
 interface EditUserFormMapper {
 
-    fun toEditUserForm(user: User, addresses: List<Address>): EditUserForm
+    fun toEditUserForm(user: User): EditUserForm
     fun toUser(
         form: EditUserForm,
-        isAddNewAddress: Boolean,
-        addresses: List<Address>,
         id: Long?
     ): User
 }
@@ -20,34 +18,24 @@ interface EditUserFormMapper {
 class EditUserFormMapperImpl @Inject constructor() :
     EditUserFormMapper {
 
-    override fun toEditUserForm(user: User, addresses: List<Address>) =
+    override fun toEditUserForm(user: User) =
         EditUserForm(
             firstName = user.firstName,
             lastName = user.lastName,
             age = user.age,
             genderIndex = user.gender.ordinal,
-            existingAddressIndex = addresses.indexOfFirst { it.id == user.address.id }
+            newAddress = user.address.value
         )
 
     override fun toUser(
         form: EditUserForm,
-        isAddNewAddress: Boolean,
-        addresses: List<Address>,
         id: Long?
-    ): User {
-        val address =
-            if (isAddNewAddress) {
-                Address(value = form.newAddress)
-            } else {
-                addresses[form.existingAddressIndex]
-            }
-        return User(
-            id = id ?: 0,
-            firstName = form.firstName,
-            lastName = form.lastName,
-            age = form.age,
-            gender = Gender.values()[form.genderIndex],
-            address = address
-        )
-    }
+    ) = User(
+        id = id ?: 0,
+        firstName = form.firstName,
+        lastName = form.lastName,
+        age = form.age,
+        gender = Gender.values()[form.genderIndex],
+        address = Address(value = form.newAddress)
+    )
 }

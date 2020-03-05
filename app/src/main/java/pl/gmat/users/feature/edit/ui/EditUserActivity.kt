@@ -17,7 +17,6 @@ import pl.gmat.users.common.model.Gender
 import pl.gmat.users.common.model.User
 import pl.gmat.users.databinding.ActivityEditUserBinding
 import pl.gmat.users.feature.edit.model.EditUserForm
-import pl.gmat.users.feature.edit.ui.widget.AddressAdapter
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -66,7 +65,6 @@ class EditUserActivity : AppCompatActivity() {
 
     private fun ActivityEditUserBinding.setupViews() {
         setupGenderSpinner()
-        setupAddressSpinner()
         setupAddClickListener()
     }
 
@@ -79,11 +77,6 @@ class EditUserActivity : AppCompatActivity() {
         genderSpinner.adapter = spinnerAdapter
     }
 
-    private fun ActivityEditUserBinding.setupAddressSpinner() {
-        addressSpinner.adapter =
-            AddressAdapter(this@EditUserActivity)
-    }
-
     private fun ActivityEditUserBinding.setupAddClickListener() {
         submitButton.setOnClickListener {
             val form = EditUserForm(
@@ -91,7 +84,6 @@ class EditUserActivity : AppCompatActivity() {
                 lastNameEditText.textString(),
                 ageEditText.textString(),
                 genderSpinner.selectedItemPosition,
-                addressSpinner.selectedItemPosition,
                 addressEditText.textString()
             )
             this@EditUserActivity.viewModel.onSubmitClicked(form)
@@ -110,7 +102,6 @@ class EditUserActivity : AppCompatActivity() {
         lastNameEditText.setText(form.lastName)
         ageEditText.setText(form.age)
         genderSpinner.setSelection(form.genderIndex)
-        addressSpinner.setSelection(form.existingAddressIndex)
         addressEditText.setText(form.newAddress)
     }
 }

@@ -88,40 +88,11 @@
                 android:layout_marginTop="@dimen/form_margin"
                 android:text="@string/address" />
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="@{!state.isAddNewAddressChecked}"
-                    android:onClick="@{() -> viewModel.onChooseExistingAddressClicked()}"
-                    android:text="@string/choose_existing" />
-
-                <RadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="@{state.isAddNewAddressChecked}"
-                    android:onClick="@{() -> viewModel.onAddNewAddressClicked()}"
-                    android:text="@string/add_new" />
-
-            </RadioGroup>
-
-            <Spinner
-                android:id="@+id/addressSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/form_margin"
-                app:addresses="@{state.addresses}"
-                android:visibility="@{state.isAddNewAddressChecked ? View.GONE : View.VISIBLE}" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/form_margin"
-                android:hint="@string/add_new_address"
-                android:visibility="@{state.isAddNewAddressChecked ? View.VISIBLE : View.GONE}">
+                android:hint="@string/add_new_address">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addressEditText"

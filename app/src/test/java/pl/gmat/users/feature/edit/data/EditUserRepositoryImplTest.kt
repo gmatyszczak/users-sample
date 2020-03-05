@@ -34,7 +34,7 @@ class EditUserRepositoryImplTest {
     private lateinit var repository: EditUserRepositoryImpl
 
     @Test
-    fun `when is new address on add user`() = runBlockingTest {
+    fun `on add user`() = runBlockingTest {
         whenever(mapperMock.toAddressEntity(testAddress)).thenReturn(testAddressEntity)
         val newId = 100L
         whenever(addressDaoMock.insert(testAddressEntity)).thenReturn(newId)
@@ -42,17 +42,8 @@ class EditUserRepositoryImplTest {
         whenever(mapperMock.toUserEntity(testUser.copy(address = testUser.address.copy(id = newId))))
             .thenReturn(userEntityToInsert)
 
-        repository.insertOrUpdateUser(testUser, isNewAddress = true)
+        repository.insertOrUpdateUser(testUser)
 
         verify(userDaoMock).insertOrUpdate(userEntityToInsert)
-    }
-
-    @Test
-    fun `when is not new address on add user`() = runBlockingTest {
-        whenever(mapperMock.toUserEntity(testUser)).thenReturn(testUserEntity)
-
-        repository.insertOrUpdateUser(testUser, isNewAddress = false)
-
-        verify(userDaoMock).insertOrUpdate(testUserEntity)
     }
 }

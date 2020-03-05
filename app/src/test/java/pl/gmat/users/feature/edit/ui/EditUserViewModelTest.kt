@@ -52,7 +52,6 @@ class EditUserViewModelTest {
     @Before
     fun setup() = runBlockingTest {
         Dispatchers.setMain(testDispatcher)
-        whenever(repositoryMock.loadAddresses()).thenReturn(emptyList())
         viewModel = EditUserViewModel(
             repositoryMock,
             EditUserMode.Add,
@@ -70,8 +69,7 @@ class EditUserViewModelTest {
 
     @Test
     fun `when mode update on init`() = runBlockingTest {
-        whenever(repositoryMock.loadAddresses()).thenReturn(addresses)
-        whenever(mapperMock.toEditUserForm(testUser, addresses)).thenReturn(EditUserForm())
+        whenever(mapperMock.toEditUserForm(testUser)).thenReturn(EditUserForm())
         val viewModel = EditUserViewModel(
             repositoryMock,
             updateMode,
@@ -84,9 +82,7 @@ class EditUserViewModelTest {
 
         verify(stateObserverMock).onChanged(
             EditUserState(
-                submitButtonTextResId = updateMode.submitButtonResId,
-                addresses = addresses,
-                isAddNewAddressChecked = false
+                submitButtonTextResId = updateMode.submitButtonResId
             )
         )
         verify(effectObserverMock).onChanged(EditUserEffect.InitializeForm(EditUserForm()))
@@ -94,43 +90,8 @@ class EditUserViewModelTest {
     }
 
     @Test
-    fun `on choose existing address clicked`() {
-        viewModel.onChooseExistingAddressClicked()
-
-        inOrder(stateObserverMock) {
-            verify(stateObserverMock).onChanged(
-                EditUserState(
-                    submitButtonTextResId = EditUserMode.Add.submitButtonResId
-                )
-            )
-            verify(stateObserverMock).onChanged(
-                EditUserState(
-                    isAddNewAddressChecked = false,
-                    submitButtonTextResId = EditUserMode.Add.submitButtonResId
-                )
-            )
-            verifyNoMoreInteractions()
-        }
-    }
-
-    @Test
-    fun `on add new address clicked`() {
-        viewModel.onAddNewAddressClicked()
-
-        inOrder(stateObserverMock) {
-            verify(stateObserverMock, times(2))
-                .onChanged(
-                    EditUserState(
-                        submitButtonTextResId = EditUserMode.Add.submitButtonResId
-                    )
-                )
-            verifyNoMoreInteractions()
-        }
-    }
-
-    @Test
     fun `when is add mode on submit clicked`() = runBlockingTest {
-        whenever(mapperMock.toUser(EditUserForm(), true, emptyList(), null))
+        whenever(mapperMock.toUser(EditUserForm(), null))
             .thenReturn(testUser)
         viewModel.onSubmitClicked(EditUserForm())
 
@@ -140,7 +101,7 @@ class EditUserViewModelTest {
                     submitButtonTextResId = EditUserMode.Add.submitButtonResId
                 )
             )
-            verify(repositoryMock).insertOrUpdateUser(testUser, isNewAddress = true)
+            verify(repositoryMock).insertOrUpdateUser(testUser)
             verify(effectObserverMock).onChanged(EditUserEffect.Finish)
             verifyNoMoreInteractions()
         }
@@ -150,8 +111,7 @@ class EditUserViewModelTest {
     fun `when is update mode on submit clicked`() = runBlockingTest {
         val repositoryMock = mock<EditUserRepository>()
         val mapperMock = mock<EditUserFormMapper>()
-        whenever(repositoryMock.loadAddresses()).thenReturn(addresses)
-        whenever(mapperMock.toEditUserForm(testUser, addresses)).thenReturn(EditUserForm())
+        whenever(mapperMock.toEditUserForm(testUser)).thenReturn(EditUserForm())
         val viewModel = EditUserViewModel(
             repositoryMock,
             updateMode,
@@ -162,11 +122,9 @@ class EditUserViewModelTest {
         viewModel.state.observeForever(stateObserverMock)
         viewModel.effect.observeForever(effectObserverMock)
 
-        whenever(mapperMock.toUser(EditUserForm(), false, addresses, testUser.id))
+        whenever(mapperMock.toUser(EditUserForm(), testUser.id))
             .thenReturn(testUser)
         val state = EditUserState(
-            isAddNewAddressChecked = false,
-            addresses = addresses,
             submitButtonTextResId = updateMode.submitButtonResId
         )
         viewModel.state.value = state
@@ -176,13 +134,11 @@ class EditUserViewModelTest {
         inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
             verify(stateObserverMock).onChanged(
                 EditUserState(
-                    isAddNewAddressChecked = false,
-                    submitButtonTextResId = updateMode.submitButtonResId,
-                    addresses = addresses
+                    submitButtonTextResId = updateMode.submitButtonResId
                 )
             )
             verify(stateObserverMock).onChanged(state)
-            verify(repositoryMock).insertOrUpdateUser(testUser, isNewAddress = false)
+            verify(repositoryMock).insertOrUpdateUser(testUser)
             verify(effectObserverMock).onChanged(EditUserEffect.Finish)
             verifyNoMoreInteractions()
         }
