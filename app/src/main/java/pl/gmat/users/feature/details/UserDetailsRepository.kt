@@ -1,5 +1,7 @@
 package pl.gmat.users.feature.details
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import pl.gmat.users.common.database.dao.AddressDao
 import pl.gmat.users.common.database.dao.UserDao
 import pl.gmat.users.common.mapper.UserMapper
@@ -8,7 +10,7 @@ import javax.inject.Inject
 
 interface UserDetailsRepository {
 
-    suspend fun loadUser(): User
+    fun loadUser(): Flow<User?>
     suspend fun deleteUser()
 }
 
@@ -19,9 +21,8 @@ class UserDetailsRepositoryImpl @Inject constructor(
     private val addressDao: AddressDao
 ) : UserDetailsRepository {
 
-    override suspend fun loadUser(): User {
-        val userEntity = userDao.load(userId)
-        return mapper.toUser(userEntity, addressDao.load(userEntity.addressId))
+    override fun loadUser() = userDao.load(userId).map {
+        it?.let { mapper.toUser(it, addressDao.load(it.addressId)) }
     }
 
     override suspend fun deleteUser() = userDao.delete(userId)

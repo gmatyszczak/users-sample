@@ -18,7 +18,7 @@ interface UserDao {
     fun loadAll(): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE id = :id")
-    suspend fun load(id: Long): UserEntity
+    fun load(id: Long): Flow<UserEntity?>
 
     @Query("DELETE FROM $USER_TABLE_NAME WHERE id = :id")
     suspend fun delete(id: Long)

@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -44,7 +45,7 @@ class UserDetailsViewModelTest {
     @Before
     fun setup() = runBlockingTest {
         Dispatchers.setMain(testDispatcher)
-        whenever(repositoryMock.loadUser()).thenReturn(testUser)
+        whenever(repositoryMock.loadUser()).thenReturn(flowOf(testUser))
         viewModel = UserDetailsViewModel(repositoryMock)
         viewModel.state.observeForever(stateObserverMock)
         viewModel.effect.observeForever(effectObserverMock)

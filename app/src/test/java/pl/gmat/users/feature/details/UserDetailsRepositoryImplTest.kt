@@ -3,6 +3,8 @@ package pl.gmat.users.feature.details
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -41,11 +43,13 @@ class UserDetailsRepositoryImplTest {
 
     @Test
     fun `on load user`() = runBlockingTest {
-        whenever(userDaoMock.load(userId)).thenReturn(testUserEntity)
+        whenever(userDaoMock.load(userId)).thenReturn(flowOf(testUserEntity))
         whenever(addressDaoMock.load(testUserEntity.addressId)).thenReturn(testAddressEntity)
         whenever(mapperMock.toUser(testUserEntity, testAddressEntity)).thenReturn(testUser)
 
-        assertEquals(testUser, repository.loadUser())
+        repository.loadUser().collect {
+            assertEquals(testUser, it)
+        }
     }
 
     @Test
