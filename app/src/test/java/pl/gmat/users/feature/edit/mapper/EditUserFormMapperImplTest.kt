@@ -15,8 +15,7 @@ class EditUserFormMapperImplTest {
         firstName = testUser.firstName,
         lastName = testUser.lastName,
         genderIndex = testUser.gender.ordinal,
-        age = testUser.age,
-        addresses = listOf(testAddress)
+        age = testUser.age
     )
 
     @Test
@@ -33,6 +32,7 @@ class EditUserFormMapperImplTest {
             testUser,
             mapper.toUser(
                 form = form,
+                addresses = listOf(testAddress),
                 id = 10
             )
         )

@@ -19,6 +19,7 @@ class EditUserRepositoryImpl @Inject constructor(
 
     override suspend fun insertOrUpdateUser(user: User) {
         val id = userDao.insertOrUpdate(mapper.toUserEntity(user))
+        addressDao.deleteForUserId(id)
         user.addresses.forEach {
             addressDao.insert(mapper.toAddressEntity(it, id))
         }

@@ -14,4 +14,7 @@ interface AddressDao {
 
     @Query("SELECT * FROM $ADDRESS_TABLE_NAME WHERE userId = :userId")
     suspend fun loadForUserId(userId: Long): List<AddressEntity>
+
+    @Query("DELETE FROM $ADDRESS_TABLE_NAME WHERE userId = :userId")
+    suspend fun deleteForUserId(userId: Long)
 }

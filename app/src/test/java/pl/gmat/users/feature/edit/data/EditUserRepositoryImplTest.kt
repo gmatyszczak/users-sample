@@ -1,6 +1,6 @@
 package pl.gmat.users.feature.edit.data
 
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -34,13 +34,17 @@ class EditUserRepositoryImplTest {
     private lateinit var repository: EditUserRepositoryImpl
 
     @Test
-    fun `on add user`() = runBlockingTest {
+    fun `on insert or update user`() = runBlockingTest {
         whenever(mapperMock.toUserEntity(testUser)).thenReturn(testUserEntity)
         whenever(userDaoMock.insertOrUpdate(testUserEntity)).thenReturn(testUserEntity.id)
         whenever(mapperMock.toAddressEntity(testAddress, testUser.id)).thenReturn(testAddressEntity)
 
         repository.insertOrUpdateUser(testUser)
 
-        verify(addressDaoMock).insert(testAddressEntity)
+        inOrder(addressDaoMock) {
+            verify(addressDaoMock).deleteForUserId(testUserEntity.id)
+            verify(addressDaoMock).insert(testAddressEntity)
+            verifyNoMoreInteractions()
+        }
     }
 }

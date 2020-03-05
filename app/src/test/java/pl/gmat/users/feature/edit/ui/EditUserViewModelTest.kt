@@ -82,7 +82,8 @@ class EditUserViewModelTest {
 
         verify(stateObserverMock).onChanged(
             EditUserState(
-                submitButtonTextResId = updateMode.submitButtonResId
+                submitButtonTextResId = updateMode.submitButtonResId,
+                addresses = listOf(testAddress)
             )
         )
         verify(effectObserverMock).onChanged(EditUserEffect.InitializeForm(EditUserForm()))
@@ -95,10 +96,10 @@ class EditUserViewModelTest {
             submitButtonTextResId = EditUserMode.Add.submitButtonResId,
             addresses = listOf(testAddress)
         )
-        whenever(mapperMock.toUser(EditUserForm(addresses = listOf(testAddress)), null))
+        whenever(mapperMock.toUser(EditUserForm(), listOf(testAddress), null))
             .thenReturn(testUser)
 
-        viewModel.onSubmitClicked(EditUserForm(addresses = listOf(testAddress)))
+        viewModel.onSubmitClicked(EditUserForm())
 
         inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
             verify(stateObserverMock).onChanged(
@@ -132,23 +133,18 @@ class EditUserViewModelTest {
         val effectObserverMock = mock<Observer<EditUserEffect>>()
         viewModel.state.observeForever(stateObserverMock)
         viewModel.effect.observeForever(effectObserverMock)
-
-        whenever(mapperMock.toUser(EditUserForm(), testUser.id))
+        whenever(mapperMock.toUser(EditUserForm(), listOf(testAddress), testUser.id))
             .thenReturn(testUser)
-        val state = EditUserState(
-            submitButtonTextResId = updateMode.submitButtonResId
-        )
-        viewModel.state.value = state
 
         viewModel.onSubmitClicked(EditUserForm())
 
         inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
             verify(stateObserverMock).onChanged(
                 EditUserState(
-                    submitButtonTextResId = updateMode.submitButtonResId
+                    submitButtonTextResId = updateMode.submitButtonResId,
+                    addresses = listOf(testAddress)
                 )
             )
-            verify(stateObserverMock).onChanged(state)
             verify(repositoryMock).insertOrUpdateUser(testUser)
             verify(effectObserverMock).onChanged(EditUserEffect.Finish)
             verifyNoMoreInteractions()
