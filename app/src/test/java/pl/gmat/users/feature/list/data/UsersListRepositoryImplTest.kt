@@ -12,10 +12,8 @@ import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import pl.gmat.users.common.database.dao.AddressDao
 import pl.gmat.users.common.database.dao.UserDao
 import pl.gmat.users.common.mapper.UserMapper
-import pl.gmat.users.testAddressEntity
 import pl.gmat.users.testUser
 import pl.gmat.users.testUserEntity
 
@@ -29,17 +27,13 @@ class UsersListRepositoryImplTest {
     @Mock
     private lateinit var userDaoMock: UserDao
 
-    @Mock
-    private lateinit var addressDaoMock: AddressDao
-
     @InjectMocks
     private lateinit var repository: UsersListRepositoryImpl
 
     @Test
     fun `on load users`() = runBlockingTest {
         whenever(userDaoMock.loadAll()).thenReturn(flowOf(listOf(testUserEntity)))
-        whenever(addressDaoMock.loadForUserId(testUserEntity.id)).thenReturn(listOf(testAddressEntity))
-        whenever(mapperMock.toUser(testUserEntity, listOf(testAddressEntity))).thenReturn(testUser)
+        whenever(mapperMock.toUser(testUserEntity, emptyList())).thenReturn(testUser)
 
         repository.loadUsers().collect {
             assertEquals(listOf(testUser), it)

@@ -48,7 +48,7 @@ class UserDetailsRepositoryImplTest {
     @Test
     fun `on load user`() = runBlockingTest {
         whenever(userDaoMock.load(testUser.id)).thenReturn(flowOf(testUserEntity))
-        whenever(addressDaoMock.loadForUserId(testUser.id)).thenReturn(listOf(testAddressEntity))
+        whenever(addressDaoMock.loadForUserId(testUser.id)).thenReturn(flowOf(listOf(testAddressEntity)))
         whenever(mapperMock.toUser(testUserEntity, listOf(testAddressEntity))).thenReturn(testUser)
 
         repository.loadUser().collect {
