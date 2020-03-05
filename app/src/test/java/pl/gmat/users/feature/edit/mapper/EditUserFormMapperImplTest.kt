@@ -14,8 +14,7 @@ class EditUserFormMapperImplTest {
         firstName = testUser.firstName,
         lastName = testUser.lastName,
         genderIndex = testUser.gender.ordinal,
-        age = testUser.age,
-        newAddress = testUser.address.value
+        age = testUser.age
     )
 
     @Test

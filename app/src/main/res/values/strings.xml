@@ -15,9 +15,9 @@
   <string name="gender_other">Other</string>
   <string name="address">Address</string>
 
-  <string name="choose_existing">Choose Existing</string>
   <string name="add_new">Add New</string>
   <string name="add_new_address">Add New Address</string>
   <string name="add">Add</string>
+  <string name="remove">Remove</string>
 
 </resources>

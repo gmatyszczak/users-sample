@@ -1,6 +1,5 @@
 package pl.gmat.users.feature.edit.mapper
 
-import pl.gmat.users.common.model.Address
 import pl.gmat.users.common.model.Gender
 import pl.gmat.users.common.model.User
 import pl.gmat.users.feature.edit.model.EditUserForm
@@ -23,8 +22,7 @@ class EditUserFormMapperImpl @Inject constructor() :
             firstName = user.firstName,
             lastName = user.lastName,
             age = user.age,
-            genderIndex = user.gender.ordinal,
-            newAddress = user.address.value
+            genderIndex = user.gender.ordinal
         )
 
     override fun toUser(
@@ -35,7 +33,6 @@ class EditUserFormMapperImpl @Inject constructor() :
         firstName = form.firstName,
         lastName = form.lastName,
         age = form.age,
-        gender = Gender.values()[form.genderIndex],
-        address = Address(value = form.newAddress)
+        gender = Gender.values()[form.genderIndex]
     )
 }

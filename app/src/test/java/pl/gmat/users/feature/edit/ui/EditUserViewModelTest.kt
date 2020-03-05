@@ -17,6 +17,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import pl.gmat.users.common.model.Address
 import pl.gmat.users.feature.edit.data.EditUserRepository
 import pl.gmat.users.feature.edit.mapper.EditUserFormMapper
 import pl.gmat.users.feature.edit.model.EditUserForm
@@ -138,6 +139,26 @@ class EditUserViewModelTest {
             verify(stateObserverMock).onChanged(state)
             verify(repositoryMock).insertOrUpdateUser(testUser)
             verify(effectObserverMock).onChanged(EditUserEffect.Finish)
+            verifyNoMoreInteractions()
+        }
+    }
+
+    @Test
+    fun `on add new address clicked`() {
+        viewModel.onAddNewAddressClicked()
+
+        inOrder(stateObserverMock, effectObserverMock) {
+            verify(stateObserverMock).onChanged(
+                EditUserState(
+                    submitButtonTextResId = EditUserMode.Add.submitButtonResId
+                )
+            )
+            verify(stateObserverMock).onChanged(
+                EditUserState(
+                    submitButtonTextResId = EditUserMode.Add.submitButtonResId,
+                    addresses = listOf(Address(id = -1))
+                )
+            )
             verifyNoMoreInteractions()
         }
     }

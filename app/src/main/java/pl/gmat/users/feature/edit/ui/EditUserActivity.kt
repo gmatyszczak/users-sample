@@ -11,12 +11,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import pl.gmat.users.R
 import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.common.model.Gender
 import pl.gmat.users.common.model.User
 import pl.gmat.users.databinding.ActivityEditUserBinding
 import pl.gmat.users.feature.edit.model.EditUserForm
+import pl.gmat.users.feature.edit.ui.widget.EditAddressesAdapter
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -50,11 +52,11 @@ class EditUserActivity : AppCompatActivity() {
             this,
             R.layout.activity_edit_user
         ).apply {
-                viewModel = this@EditUserActivity.viewModel
-                state = this@EditUserActivity.viewModel.state
-                lifecycleOwner = this@EditUserActivity
-                setupViews()
-            }
+            viewModel = this@EditUserActivity.viewModel
+            state = this@EditUserActivity.viewModel.state
+            lifecycleOwner = this@EditUserActivity
+            setupViews()
+        }
         viewModel.effect.observe(this, Observer { handleEffect(it) })
     }
 
@@ -66,6 +68,7 @@ class EditUserActivity : AppCompatActivity() {
     private fun ActivityEditUserBinding.setupViews() {
         setupGenderSpinner()
         setupAddClickListener()
+        setupAddressesAdapter()
     }
 
     private fun ActivityEditUserBinding.setupGenderSpinner() {
@@ -83,10 +86,16 @@ class EditUserActivity : AppCompatActivity() {
                 firstNameEditText.textString(),
                 lastNameEditText.textString(),
                 ageEditText.textString(),
-                genderSpinner.selectedItemPosition,
-                addressEditText.textString()
+                genderSpinner.selectedItemPosition
             )
             this@EditUserActivity.viewModel.onSubmitClicked(form)
+        }
+    }
+
+    private fun ActivityEditUserBinding.setupAddressesAdapter() {
+        addressesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@EditUserActivity)
+            adapter = EditAddressesAdapter(this@EditUserActivity.viewModel, this@EditUserActivity)
         }
     }
 
@@ -102,6 +111,5 @@ class EditUserActivity : AppCompatActivity() {
         lastNameEditText.setText(form.lastName)
         ageEditText.setText(form.age)
         genderSpinner.setSelection(form.genderIndex)
-        addressEditText.setText(form.newAddress)
     }
 }
