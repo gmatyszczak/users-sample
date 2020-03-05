@@ -21,7 +21,6 @@ import pl.gmat.users.feature.edit.data.EditUserRepository
 import pl.gmat.users.feature.edit.mapper.EditUserFormMapper
 import pl.gmat.users.feature.edit.model.EditUserForm
 import pl.gmat.users.feature.edit.model.EditUserMode
-import pl.gmat.users.testAddress
 import pl.gmat.users.testUser
 
 @ExperimentalCoroutinesApi
@@ -47,7 +46,6 @@ class EditUserViewModelTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
     private val updateMode = EditUserMode.Update(testUser)
-    private val addresses = listOf(testAddress)
 
     @Before
     fun setup() = runBlockingTest {
