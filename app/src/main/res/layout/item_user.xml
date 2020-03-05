@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="pl.gmat.users.feature.list.UsersListViewModel" />
+            type="pl.gmat.users.feature.list.ui.UsersListViewModel" />
 
         <variable
             name="user"

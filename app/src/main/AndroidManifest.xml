@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UsersSample">
-        <activity android:name=".feature.list.UsersListActivity">
+        <activity android:name=".feature.list.ui.UsersListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +18,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".feature.edit.EditUserActivity" />
-        <activity android:name=".feature.details.UserDetailsActivity" />
+        <activity android:name=".feature.edit.ui.EditUserActivity" />
+        <activity android:name=".feature.details.ui.UserDetailsActivity" />
     </application>
 
 </manifest>
