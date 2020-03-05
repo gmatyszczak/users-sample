@@ -61,6 +61,7 @@ class UserDetailsRepositoryImplTest {
         repository.deleteUser()
 
         verify(userDaoMock).delete(testUser.id)
+        verify(addressDaoMock).deleteForUserId(testUser.id)
     }
 
 }

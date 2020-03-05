@@ -28,5 +28,8 @@ class UserDetailsRepositoryImpl @Inject constructor(
             user?.let { mapper.toUser(it, addresses) }
         }
 
-    override suspend fun deleteUser() = userDao.delete(userId)
+    override suspend fun deleteUser() {
+        userDao.delete(userId)
+        addressDao.deleteForUserId(userId)
+    }
 }

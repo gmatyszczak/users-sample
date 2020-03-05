@@ -18,4 +18,7 @@ interface AddressDao {
 
     @Query("DELETE FROM $ADDRESS_TABLE_NAME WHERE userId = :userId")
     suspend fun deleteForUserId(userId: Long)
+
+    @Query("DELETE FROM $ADDRESS_TABLE_NAME")
+    suspend fun deleteAll()
 }

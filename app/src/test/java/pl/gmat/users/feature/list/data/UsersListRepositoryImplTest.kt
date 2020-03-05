@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import pl.gmat.users.common.database.dao.AddressDao
 import pl.gmat.users.common.database.dao.UserDao
 import pl.gmat.users.common.mapper.UserMapper
 import pl.gmat.users.testUser
@@ -26,6 +27,9 @@ class UsersListRepositoryImplTest {
 
     @Mock
     private lateinit var userDaoMock: UserDao
+
+    @Mock
+    private lateinit var addressDaoMock: AddressDao
 
     @InjectMocks
     private lateinit var repository: UsersListRepositoryImpl
@@ -45,5 +49,6 @@ class UsersListRepositoryImplTest {
         repository.deleteUsers()
 
         verify(userDaoMock).deleteAll()
+        verify(addressDaoMock).deleteAll()
     }
 }
