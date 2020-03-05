@@ -22,7 +22,7 @@ class UserDetailsRepositoryImpl @Inject constructor(
 ) : UserDetailsRepository {
 
     override fun loadUser() = userDao.load(userId).map {
-        it?.let { mapper.toUser(it, addressDao.load(it.addressId)) }
+        it?.let { mapper.toUser(it, addressDao.loadForUserId(it.id)) }
     }
 
     override suspend fun deleteUser() = userDao.delete(userId)

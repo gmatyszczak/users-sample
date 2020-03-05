@@ -10,5 +10,5 @@ data class User(
     val lastName: String = "",
     val age: String = "",
     val gender: Gender = Gender.MALE,
-    val address: Address = Address()
+    val addresses: List<Address> = emptyList()
 ): Parcelable

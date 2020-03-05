@@ -24,7 +24,7 @@ class UsersListRepositoryImpl @Inject constructor(
         userDao.loadAll()
             .map { userEntities ->
                 userEntities.map { userEntity ->
-                    mapper.toUser(userEntity, addressDao.load(userEntity.addressId))
+                    mapper.toUser(userEntity, addressDao.loadForUserId(userEntity.id))
                 }
             }
 

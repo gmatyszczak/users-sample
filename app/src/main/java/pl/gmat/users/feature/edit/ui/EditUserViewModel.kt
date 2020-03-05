@@ -39,7 +39,7 @@ class EditUserViewModel @Inject constructor(
     fun onAddNewAddressClicked(address: String) {
         val addresses = currentState.addresses
             .toMutableList()
-            .apply { add(Address(id = -1, value = address)) }
+            .apply { add(Address(value = address)) }
         state.value = currentState.copy(
             addresses = addresses
         )
@@ -53,7 +53,7 @@ class EditUserViewModel @Inject constructor(
 
     fun onSubmitClicked(form: EditUserForm) = viewModelScope.launch(Dispatchers.Main) {
         val userId = if (mode is EditUserMode.Update) mode.user.id else null
-        val user = mapper.toUser(form, userId)
+        val user = mapper.toUser(form.copy(addresses = currentState.addresses), userId)
         repository.insertOrUpdateUser(user)
         effect.value = EditUserEffect.Finish
     }

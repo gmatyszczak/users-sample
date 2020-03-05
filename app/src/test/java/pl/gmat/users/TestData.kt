@@ -12,7 +12,7 @@ const val age = "age"
 const val addressValue = "addressValue"
 
 val testAddress = Address(
-    id = 0,
+    id = 10,
     value = addressValue
 )
 
@@ -22,12 +22,13 @@ val testUser = User(
     lastName = lastName,
     age = age,
     gender = Gender.FEMALE,
-    address = testAddress
+    addresses = listOf(testAddress)
 )
 
 val testAddressEntity = AddressEntity(
-    id = 0,
-    value = addressValue
+    id = 10,
+    value = addressValue,
+    userId = 10
 )
 
 val testUserEntity = UserEntity(
@@ -35,6 +36,5 @@ val testUserEntity = UserEntity(
     firstName = firstName,
     lastName = lastName,
     age = age,
-    gender = Gender.FEMALE.name,
-    addressId = testAddressEntity.id
+    gender = Gender.FEMALE.name
 )

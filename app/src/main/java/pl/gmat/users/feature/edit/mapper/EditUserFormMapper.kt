@@ -22,7 +22,8 @@ class EditUserFormMapperImpl @Inject constructor() :
             firstName = user.firstName,
             lastName = user.lastName,
             age = user.age,
-            genderIndex = user.gender.ordinal
+            genderIndex = user.gender.ordinal,
+            addresses = user.addresses
         )
 
     override fun toUser(
@@ -33,6 +34,7 @@ class EditUserFormMapperImpl @Inject constructor() :
         firstName = form.firstName,
         lastName = form.lastName,
         age = form.age,
-        gender = Gender.values()[form.genderIndex]
+        gender = Gender.values()[form.genderIndex],
+        addresses = form.addresses
     )
 }

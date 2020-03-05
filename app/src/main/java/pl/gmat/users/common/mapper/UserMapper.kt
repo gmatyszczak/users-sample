@@ -9,21 +9,21 @@ import javax.inject.Inject
 
 interface UserMapper {
 
-    fun toUser(userEntity: UserEntity, addressEntity: AddressEntity): User
+    fun toUser(userEntity: UserEntity, addressEntities: List<AddressEntity>): User
     fun toAddress(addressEntity: AddressEntity): Address
     fun toUserEntity(user: User): UserEntity
-    fun toAddressEntity(address: Address): AddressEntity
+    fun toAddressEntity(address: Address, userId: Long): AddressEntity
 }
 
 class UserMapperImpl @Inject constructor() : UserMapper {
 
-    override fun toUser(userEntity: UserEntity, addressEntity: AddressEntity) = User(
+    override fun toUser(userEntity: UserEntity, addressEntities: List<AddressEntity>) = User(
         id = userEntity.id,
         firstName = userEntity.firstName,
         lastName = userEntity.lastName,
         age = userEntity.age,
         gender = Gender.valueOf(userEntity.gender),
-        address = toAddress(addressEntity)
+        addresses = addressEntities.map { toAddress(it) }
     )
 
     override fun toAddress(addressEntity: AddressEntity) = Address(
@@ -36,12 +36,12 @@ class UserMapperImpl @Inject constructor() : UserMapper {
         firstName = user.firstName,
         lastName = user.lastName,
         age = user.age,
-        gender = user.gender.name,
-        addressId = user.address.id
+        gender = user.gender.name
     )
 
-    override fun toAddressEntity(address: Address) = AddressEntity(
+    override fun toAddressEntity(address: Address, userId: Long) = AddressEntity(
         id = address.id,
-        value = address.value
+        value = address.value,
+        userId = userId
     )
 }

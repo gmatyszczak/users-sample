@@ -121,19 +121,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/details_margin"
-                android:text="@string/address"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
+                android:text="@string/addresses"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/genderLabelTextView" />
 
-            <TextView
-                android:id="@+id/addressTextView"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addressesRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{state.user.address.value}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/addressLabelTextView"
+                android:layout_marginTop="@dimen/details_margin"
+                app:addressesList="@{state.user.addresses}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/verticalGuideline" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addressLabelTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

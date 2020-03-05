@@ -13,7 +13,7 @@ class UserMapperImplTest {
 
     @Test
     fun `to user`() {
-        assertEquals(testUser, mapper.toUser(testUserEntity, testAddressEntity))
+        assertEquals(testUser, mapper.toUser(testUserEntity, listOf(testAddressEntity)))
     }
 
     @Test
@@ -28,6 +28,6 @@ class UserMapperImplTest {
 
     @Test
     fun `to address entity`() {
-        assertEquals(testAddressEntity, mapper.toAddressEntity(testAddress))
+        assertEquals(testAddressEntity, mapper.toAddressEntity(testAddress, testUser.id))
     }
 }

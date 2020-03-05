@@ -12,7 +12,7 @@ import pl.gmat.users.common.database.entity.UserEntity
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(user: UserEntity)
+    suspend fun insertOrUpdate(user: UserEntity): Long
 
     @Query("SELECT * FROM $USER_TABLE_NAME")
     fun loadAll(): Flow<List<UserEntity>>

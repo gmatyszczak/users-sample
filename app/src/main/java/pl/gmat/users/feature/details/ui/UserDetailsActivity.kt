@@ -11,9 +11,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import pl.gmat.users.R
 import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.databinding.ActivityUserDetailsBinding
+import pl.gmat.users.feature.details.ui.widget.AddressesAdapter
 import pl.gmat.users.feature.edit.ui.EditUserActivity
 import javax.inject.Inject
 import javax.inject.Provider
@@ -50,8 +52,16 @@ class UserDetailsActivity : AppCompatActivity() {
             viewModel = this@UserDetailsActivity.viewModel
             state = this@UserDetailsActivity.viewModel.state
             lifecycleOwner = this@UserDetailsActivity
+            setupAddressesAdapter()
         }
         viewModel.effect.observe(this, Observer { handleEffect(it) })
+    }
+
+    private fun ActivityUserDetailsBinding.setupAddressesAdapter() {
+        addressesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@UserDetailsActivity)
+            adapter = AddressesAdapter(this@UserDetailsActivity)
+        }
     }
 
     private fun handleEffect(effect: UserDetailsEffect) = when (effect) {

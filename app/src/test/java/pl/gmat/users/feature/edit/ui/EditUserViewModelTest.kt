@@ -91,14 +91,25 @@ class EditUserViewModelTest {
 
     @Test
     fun `when is add mode on submit clicked`() = runBlockingTest {
-        whenever(mapperMock.toUser(EditUserForm(), null))
+        viewModel.state.value = EditUserState(
+            submitButtonTextResId = EditUserMode.Add.submitButtonResId,
+            addresses = listOf(testAddress)
+        )
+        whenever(mapperMock.toUser(EditUserForm(addresses = listOf(testAddress)), null))
             .thenReturn(testUser)
-        viewModel.onSubmitClicked(EditUserForm())
+
+        viewModel.onSubmitClicked(EditUserForm(addresses = listOf(testAddress)))
 
         inOrder(stateObserverMock, repositoryMock, effectObserverMock) {
             verify(stateObserverMock).onChanged(
                 EditUserState(
                     submitButtonTextResId = EditUserMode.Add.submitButtonResId
+                )
+            )
+            verify(stateObserverMock).onChanged(
+                EditUserState(
+                    submitButtonTextResId = EditUserMode.Add.submitButtonResId,
+                    addresses = listOf(testAddress)
                 )
             )
             verify(repositoryMock).insertOrUpdateUser(testUser)
@@ -157,7 +168,7 @@ class EditUserViewModelTest {
             verify(stateObserverMock).onChanged(
                 EditUserState(
                     submitButtonTextResId = EditUserMode.Add.submitButtonResId,
-                    addresses = listOf(Address(id = -1, value = "test"))
+                    addresses = listOf(Address(value = "test"))
                 )
             )
             verifyNoMoreInteractions()

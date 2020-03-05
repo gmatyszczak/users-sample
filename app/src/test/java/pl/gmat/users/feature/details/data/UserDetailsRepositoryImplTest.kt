@@ -34,13 +34,11 @@ class UserDetailsRepositoryImplTest {
 
     private lateinit var repository: UserDetailsRepositoryImpl
 
-    private val userId = 100L
-
     @Before
     fun setup() {
         repository =
             UserDetailsRepositoryImpl(
-                userId,
+                testUser.id,
                 mapperMock,
                 userDaoMock,
                 addressDaoMock
@@ -49,9 +47,9 @@ class UserDetailsRepositoryImplTest {
 
     @Test
     fun `on load user`() = runBlockingTest {
-        whenever(userDaoMock.load(userId)).thenReturn(flowOf(testUserEntity))
-        whenever(addressDaoMock.load(testUserEntity.addressId)).thenReturn(testAddressEntity)
-        whenever(mapperMock.toUser(testUserEntity, testAddressEntity)).thenReturn(testUser)
+        whenever(userDaoMock.load(testUser.id)).thenReturn(flowOf(testUserEntity))
+        whenever(addressDaoMock.loadForUserId(testUser.id)).thenReturn(listOf(testAddressEntity))
+        whenever(mapperMock.toUser(testUserEntity, listOf(testAddressEntity))).thenReturn(testUser)
 
         repository.loadUser().collect {
             assertEquals(testUser, it)
@@ -62,7 +60,7 @@ class UserDetailsRepositoryImplTest {
     fun `on delete user`() = runBlockingTest {
         repository.deleteUser()
 
-        verify(userDaoMock).delete(userId)
+        verify(userDaoMock).delete(testUser.id)
     }
 
 }

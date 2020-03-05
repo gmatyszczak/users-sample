@@ -38,8 +38,8 @@ class UsersListRepositoryImplTest {
     @Test
     fun `on load users`() = runBlockingTest {
         whenever(userDaoMock.loadAll()).thenReturn(flowOf(listOf(testUserEntity)))
-        whenever(addressDaoMock.load(testUserEntity.addressId)).thenReturn(testAddressEntity)
-        whenever(mapperMock.toUser(testUserEntity, testAddressEntity)).thenReturn(testUser)
+        whenever(addressDaoMock.loadForUserId(testUserEntity.id)).thenReturn(listOf(testAddressEntity))
+        whenever(mapperMock.toUser(testUserEntity, listOf(testAddressEntity))).thenReturn(testUser)
 
         repository.loadUsers().collect {
             assertEquals(listOf(testUser), it)

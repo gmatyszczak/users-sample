@@ -114,7 +114,7 @@
                 android:id="@+id/addressesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:addresses="@{state.addresses}" />
+                app:editAddressesList="@{state.addresses}" />
 
             <Button
                 android:id="@+id/submitButton"

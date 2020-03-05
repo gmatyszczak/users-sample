@@ -8,5 +8,6 @@ const val ADDRESS_TABLE_NAME = "addresses"
 @Entity(tableName = ADDRESS_TABLE_NAME)
 data class AddressEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val value: String = ""
+    val value: String = "",
+    val userId: Long = 0
 )

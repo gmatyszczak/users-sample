@@ -13,8 +13,8 @@ fun setTextFromResId(textView: TextView, @StringRes textResId: Int) {
     }
 }
 
-@BindingAdapter("addresses")
-fun setAddresses(recyclerView: RecyclerView, addresses: List<Address>?) {
+@BindingAdapter("editAddressesList")
+fun setEditAddressesList(recyclerView: RecyclerView, addresses: List<Address>?) {
     if (addresses != null) {
         (recyclerView.adapter as? EditAddressesAdapter)?.submitList(addresses)
     }
