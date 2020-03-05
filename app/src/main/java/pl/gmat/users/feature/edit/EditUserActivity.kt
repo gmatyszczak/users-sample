@@ -48,8 +48,7 @@ class EditUserActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView<ActivityEditUserBinding>(
             this,
             R.layout.activity_edit_user
-        )
-            .apply {
+        ).apply {
                 viewModel = this@EditUserActivity.viewModel
                 state = this@EditUserActivity.viewModel.state
                 lifecycleOwner = this@EditUserActivity
@@ -65,6 +64,7 @@ class EditUserActivity : AppCompatActivity() {
 
     private fun ActivityEditUserBinding.setupViews() {
         setupGenderSpinner()
+        setupAddressSpinner()
         setupAddClickListener()
     }
 
@@ -75,6 +75,10 @@ class EditUserActivity : AppCompatActivity() {
             Gender.values().map { getString(it.nameResId) })
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         genderSpinner.adapter = spinnerAdapter
+    }
+
+    private fun ActivityEditUserBinding.setupAddressSpinner() {
+        addressSpinner.adapter = AddressAdapter(this@EditUserActivity)
     }
 
     private fun ActivityEditUserBinding.setupAddClickListener() {

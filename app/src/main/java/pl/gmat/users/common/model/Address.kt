@@ -7,4 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class Address(
     val id: Long = 0,
     val value: String = ""
-) : Parcelable
+) : Parcelable {
+
+    override fun toString() = value
+}
