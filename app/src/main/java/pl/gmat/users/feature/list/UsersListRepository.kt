@@ -11,6 +11,7 @@ import javax.inject.Inject
 interface UsersListRepository {
 
     fun loadUsers(): Flow<List<User>>
+    suspend fun deleteUsers()
 }
 
 class UsersListRepositoryImpl @Inject constructor(
@@ -26,4 +27,6 @@ class UsersListRepositoryImpl @Inject constructor(
                     mapper.toUser(userEntity, addressDao.load(userEntity.addressId))
                 }
             }
+
+    override suspend fun deleteUsers() = userDao.deleteAll()
 }

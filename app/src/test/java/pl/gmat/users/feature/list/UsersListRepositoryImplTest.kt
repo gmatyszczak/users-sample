@@ -1,5 +1,6 @@
 package pl.gmat.users.feature.list
 
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -35,7 +36,7 @@ class UsersListRepositoryImplTest {
     private lateinit var repository: UsersListRepositoryImpl
 
     @Test
-    fun `when is new address on add user`() = runBlockingTest {
+    fun `on load users`() = runBlockingTest {
         whenever(userDaoMock.loadAll()).thenReturn(flowOf(listOf(testUserEntity)))
         whenever(addressDaoMock.load(testUserEntity.addressId)).thenReturn(testAddressEntity)
         whenever(mapperMock.toUser(testUserEntity, testAddressEntity)).thenReturn(testUser)
@@ -45,4 +46,10 @@ class UsersListRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `on delete users`() = runBlockingTest {
+        repository.deleteUsers()
+
+        verify(userDaoMock).deleteAll()
+    }
 }

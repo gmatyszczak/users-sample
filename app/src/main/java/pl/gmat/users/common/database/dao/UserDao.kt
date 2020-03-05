@@ -22,4 +22,7 @@ interface UserDao {
 
     @Query("DELETE FROM $USER_TABLE_NAME WHERE id = :id")
     suspend fun delete(id: Long)
+
+    @Query("DELETE FROM $USER_TABLE_NAME")
+    suspend fun deleteAll()
 }

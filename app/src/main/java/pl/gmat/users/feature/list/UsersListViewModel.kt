@@ -30,7 +30,9 @@ class UsersListViewModel @Inject constructor(
         effect.value = UsersListEffect.ShowAddUser
     }
 
-    fun onDeleteAllClicked() = Unit // TODO
+    fun onDeleteAllClicked() = viewModelScope.launch {
+        usersListRepository.deleteUsers()
+    }
 
     fun onUserClicked(user: User) {
         effect.value = UsersListEffect.ShowUserDetails(user.id)

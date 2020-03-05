@@ -3,6 +3,7 @@ package pl.gmat.users.feature.list
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.inOrder
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -76,5 +77,12 @@ class UsersListViewModelTest {
             verify(effectObserverMock).onChanged(UsersListEffect.ShowUserDetails(testUser.id))
             verifyNoMoreInteractions()
         }
+    }
+
+    @Test
+    fun `on delete all clicked`() = runBlockingTest {
+        viewModel.onDeleteAllClicked()
+
+        verify(usersListRepositoryMock).deleteUsers()
     }
 }
