@@ -3,7 +3,6 @@ package pl.gmat.users.feature.edit.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.gmat.users.common.model.Address
 import pl.gmat.users.common.ui.SingleLiveEvent
@@ -25,17 +24,11 @@ class EditUserViewModel @Inject constructor(
     private val currentState get() = state.value ?: EditUserState()
 
     init {
-        viewModelScope.launch(Dispatchers.Main) {
-            state.value = currentState.copy(
-                submitButtonTextResId = mode.submitButtonResId
-            )
-            if (mode is EditUserMode.Update) {
-                val form = mapper.toEditUserForm(mode.user)
-                effect.value = EditUserEffect.InitializeForm(form)
-                state.value = currentState.copy(
-                    addresses = mode.user.addresses
-                )
-            }
+        state.value = currentState.copy(submitButtonTextResId = mode.submitButtonResId)
+        if (mode is EditUserMode.Update) {
+            val form = mapper.toEditUserForm(mode.user)
+            effect.value = EditUserEffect.InitializeForm(form)
+            state.value = currentState.copy(addresses = mode.user.addresses)
         }
     }
 
@@ -53,7 +46,7 @@ class EditUserViewModel @Inject constructor(
         )
     }
 
-    fun onSubmitClicked(form: EditUserForm) = viewModelScope.launch(Dispatchers.Main) {
+    fun onSubmitClicked(form: EditUserForm) = viewModelScope.launch {
         val userId = if (mode is EditUserMode.Update) mode.user.id else null
         val user = mapper.toUser(form, currentState.addresses, userId)
         repository.insertOrUpdateUser(user)

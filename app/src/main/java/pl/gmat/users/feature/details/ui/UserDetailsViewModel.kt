@@ -3,7 +3,6 @@ package pl.gmat.users.feature.details.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import pl.gmat.users.common.ui.SingleLiveEvent
@@ -20,14 +19,14 @@ class UserDetailsViewModel @Inject constructor(
     private val currentState get() = state.value ?: UserDetailsState()
 
     init {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             userDetailsRepository.loadUser().collect {
                 it?.let { state.value = currentState.copy(user = it) }
             }
         }
     }
 
-    fun onDeleteClicked() = viewModelScope.launch(Dispatchers.Main) {
+    fun onDeleteClicked() = viewModelScope.launch {
         userDetailsRepository.deleteUser()
         effect.value = UserDetailsEffect.Finish
     }
