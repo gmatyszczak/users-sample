@@ -7,7 +7,7 @@ import pl.gmat.users.common.database.dao.UserDao
 import pl.gmat.users.common.database.entity.AddressEntity
 import pl.gmat.users.common.database.entity.UserEntity
 
-private const val DATABASE_VERSION = 3
+private const val DATABASE_VERSION = 1
 
 @Database(
     entities = [

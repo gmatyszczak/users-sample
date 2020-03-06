@@ -19,7 +19,6 @@ class AppModule {
     @Singleton
     fun provideDatabase(application: UsersApplication): UsersDatabase =
         Room.databaseBuilder(application, UsersDatabase::class.java, "users.db")
-            .fallbackToDestructiveMigration() // TODO for simplified development, remove before release
             .build()
 
     @Provides
