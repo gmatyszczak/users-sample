@@ -114,6 +114,7 @@
                 android:id="@+id/addressesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
                 app:editAddressesList="@{state.addresses}" />
 
             <Button

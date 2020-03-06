@@ -167,6 +167,7 @@ class EditUserViewModelTest {
                     addresses = listOf(Address(value = "test"))
                 )
             )
+            verify(effectObserverMock).onChanged(EditUserEffect.ClearNewAddressEditText)
             verifyNoMoreInteractions()
         }
     }

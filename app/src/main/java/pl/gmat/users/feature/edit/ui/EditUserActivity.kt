@@ -104,6 +104,7 @@ class EditUserActivity : AppCompatActivity() {
     private fun handleEffect(effect: EditUserEffect) = when (effect) {
         is EditUserEffect.Finish -> finish()
         is EditUserEffect.InitializeForm -> binding?.initializeForm(effect.form)
+        EditUserEffect.ClearNewAddressEditText -> binding?.addressEditText?.setText("")
     }
 
     private fun ActivityEditUserBinding.initializeForm(form: EditUserForm) {

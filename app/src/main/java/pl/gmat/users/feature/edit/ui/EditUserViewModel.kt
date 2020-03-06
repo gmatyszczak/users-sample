@@ -43,9 +43,8 @@ class EditUserViewModel @Inject constructor(
         val addresses = currentState.addresses
             .toMutableList()
             .apply { add(Address(value = address)) }
-        state.value = currentState.copy(
-            addresses = addresses
-        )
+        state.value = currentState.copy(addresses = addresses)
+        effect.value = EditUserEffect.ClearNewAddressEditText
     }
 
     fun onRemoveAddressClicked(address: Address) {
