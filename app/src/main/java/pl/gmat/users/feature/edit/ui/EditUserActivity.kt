@@ -9,19 +9,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import pl.gmat.users.R
-import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.common.model.Gender
 import pl.gmat.users.common.model.User
 import pl.gmat.users.databinding.ActivityEditUserBinding
 import pl.gmat.users.feature.edit.model.EditUserForm
 import pl.gmat.users.feature.edit.ui.widget.EditAddressesAdapter
-import javax.inject.Inject
-import javax.inject.Provider
 
+@AndroidEntryPoint
 class EditUserActivity : AppCompatActivity() {
 
     companion object {
@@ -33,20 +30,11 @@ class EditUserActivity : AppCompatActivity() {
             }
     }
 
-    @Inject
-    lateinit var viewModelProvider: Provider<EditUserViewModel>
-
     private var binding: ActivityEditUserBinding? = null
 
-    private val viewModel: EditUserViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>) = viewModelProvider.get() as T
-        }
-    }
+    private val viewModel: EditUserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Injector.appComponent.editUserComponentFactory().create(this).inject(this)
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityEditUserBinding>(
             this,

@@ -2,21 +2,18 @@ package pl.gmat.users.feature.details.dagger
 
 import dagger.Module
 import dagger.Provides
-import pl.gmat.users.common.dagger.ScreenScope
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import pl.gmat.users.feature.details.data.UserDetailsRepository
 import pl.gmat.users.feature.details.data.UserDetailsRepositoryImpl
-import pl.gmat.users.feature.details.ui.UserDetailsActivity
 
 @Module
+@InstallIn(ActivityRetainedComponent::class)
 class UserDetailsModule {
 
     @Provides
-    @ScreenScope
+    @ActivityRetainedScoped
     fun provideUsersListRepository(repository: UserDetailsRepositoryImpl): UserDetailsRepository =
         repository
-
-    @Provides
-    @ScreenScope
-    fun provideUserId(activity: UserDetailsActivity): Long =
-        activity.intent.getLongExtra(UserDetailsActivity.EXTRA_USER_ID, -1)
 }

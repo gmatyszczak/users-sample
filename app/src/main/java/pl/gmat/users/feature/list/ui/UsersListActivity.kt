@@ -7,32 +7,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import pl.gmat.users.R
-import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.databinding.ActivityUsersListBinding
 import pl.gmat.users.feature.details.ui.UserDetailsActivity
 import pl.gmat.users.feature.edit.ui.EditUserActivity
 import pl.gmat.users.feature.list.ui.widget.UsersListAdapter
-import javax.inject.Inject
-import javax.inject.Provider
 
+@AndroidEntryPoint
 class UsersListActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelProvider: Provider<UsersListViewModel>
-
-    private val viewModel: UsersListViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>) = viewModelProvider.get() as T
-        }
-    }
+    private val viewModel: UsersListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Injector.appComponent.usersListComponentFactory().create(this).inject(this)
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityUsersListBinding>(this, R.layout.activity_users_list)
             .apply {

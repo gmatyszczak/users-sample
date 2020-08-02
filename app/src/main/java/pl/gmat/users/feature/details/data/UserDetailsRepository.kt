@@ -11,24 +11,23 @@ import javax.inject.Inject
 
 interface UserDetailsRepository {
 
-    fun loadUser(): Flow<User?>
-    suspend fun deleteUser()
+    fun loadUser(userId: Long): Flow<User?>
+    suspend fun deleteUser(userId: Long)
 }
 
 @ExperimentalCoroutinesApi
 class UserDetailsRepositoryImpl @Inject constructor(
-    private val userId: Long,
     private val mapper: UserMapper,
     private val userDao: UserDao,
     private val addressDao: AddressDao
 ) : UserDetailsRepository {
 
-    override fun loadUser() =
+    override fun loadUser(userId: Long) =
         userDao.load(userId).combine(addressDao.loadForUserId(userId)) { user, addresses ->
             user?.let { mapper.toUser(it, addresses) }
         }
 
-    override suspend fun deleteUser() {
+    override suspend fun deleteUser(userId: Long) {
         userDao.delete(userId)
         addressDao.deleteForUserId(userId)
     }

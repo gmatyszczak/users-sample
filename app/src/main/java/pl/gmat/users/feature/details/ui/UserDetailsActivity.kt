@@ -9,17 +9,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import pl.gmat.users.R
-import pl.gmat.users.common.dagger.Injector
 import pl.gmat.users.databinding.ActivityUserDetailsBinding
 import pl.gmat.users.feature.details.ui.widget.AddressesAdapter
 import pl.gmat.users.feature.edit.ui.EditUserActivity
-import javax.inject.Inject
-import javax.inject.Provider
 
+@AndroidEntryPoint
 class UserDetailsActivity : AppCompatActivity() {
 
     companion object {
@@ -32,18 +29,9 @@ class UserDetailsActivity : AppCompatActivity() {
             }
     }
 
-    @Inject
-    lateinit var viewModelProvider: Provider<UserDetailsViewModel>
-
-    private val viewModel: UserDetailsViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>) = viewModelProvider.get() as T
-        }
-    }
+    private val viewModel: UserDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Injector.appComponent.userDetailsComponentFactory().create(this).inject(this)
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityUserDetailsBinding>(
             this,

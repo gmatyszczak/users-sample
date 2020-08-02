@@ -1,5 +1,6 @@
 package pl.gmat.users.feature.list.ui
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,9 +9,8 @@ import kotlinx.coroutines.launch
 import pl.gmat.users.common.model.User
 import pl.gmat.users.common.ui.SingleLiveEvent
 import pl.gmat.users.feature.list.data.UsersListRepository
-import javax.inject.Inject
 
-class UsersListViewModel @Inject constructor(
+class UsersListViewModel @ViewModelInject constructor(
     private val usersListRepository: UsersListRepository
 ) : ViewModel() {
 

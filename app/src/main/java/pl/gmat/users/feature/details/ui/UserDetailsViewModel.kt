@@ -1,15 +1,18 @@
 package pl.gmat.users.feature.details.ui
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import pl.gmat.users.common.ui.SingleLiveEvent
 import pl.gmat.users.feature.details.data.UserDetailsRepository
-import javax.inject.Inject
 
-class UserDetailsViewModel @Inject constructor(
+class UserDetailsViewModel @ViewModelInject constructor(
+    @Assisted private val savedState: SavedStateHandle,
     private val userDetailsRepository: UserDetailsRepository
 ) : ViewModel() {
 
@@ -17,17 +20,18 @@ class UserDetailsViewModel @Inject constructor(
     val effect = SingleLiveEvent<UserDetailsEffect>()
 
     private val currentState get() = state.value ?: UserDetailsState()
+    private val userId = savedState.get<Long>(UserDetailsActivity.EXTRA_USER_ID) ?: -1
 
     init {
         viewModelScope.launch {
-            userDetailsRepository.loadUser().collect {
+            userDetailsRepository.loadUser(userId).collect {
                 it?.let { state.value = currentState.copy(user = it) }
             }
         }
     }
 
     fun onDeleteClicked() = viewModelScope.launch {
-        userDetailsRepository.deleteUser()
+        userDetailsRepository.deleteUser(userId)
         effect.value = UserDetailsEffect.Finish
     }
 

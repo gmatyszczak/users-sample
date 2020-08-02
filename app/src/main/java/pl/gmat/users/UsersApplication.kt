@@ -1,12 +1,7 @@
 package pl.gmat.users
 
 import android.app.Application
-import pl.gmat.users.common.dagger.Injector
+import dagger.hilt.android.HiltAndroidApp
 
-class UsersApplication : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        Injector.createGraph(this)
-    }
-}
+@HiltAndroidApp
+class UsersApplication : Application()
